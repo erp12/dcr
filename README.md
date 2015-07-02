@@ -7,7 +7,7 @@ install.packages("devtools")
 
 install.packages("shiny")
 
-install.packgaes("jsonlite")
+install.packages("jsonlite")
 
 ###Download this repository and open dcr.Rproj###
 ### Install this dcr package###
