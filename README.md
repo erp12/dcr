@@ -14,3 +14,28 @@ library(devtools)
 load_all()
 
 install()
+
+# Draw simple dc.js charts#
+We will use the mtcars data to make some simple charts
+
+library(dcr)
+
+###Create chart object###
+mydcr <- dcr(mtcars)
+
+###Add a pie chart###
+chart1 <- dcrchart("pieChart", "chart1", "cyl", reduceCount(), width = 200, height = 200)
+
+###Add a bar chart###
+chart2 <- dcrchart("barChart", "chart2", "gear", reduceSum("wt"), 
+                   width = 300, height = 200, x = x_ordinal(), xUnits = dc_code("dc.units.ordinal"),
+                   xAxisLabel = "Gear", yAxisLabel = "Total Weight")
+
+###Add a row chart###
+chart3 <- dcrchart("rowChart", "chart3", "carb", reduceCount(), width = 300, height = 200)
+
+###Finally we can see the charts###
+mydcr + chart1 + chart2 + chart3
+
+#Work with Shiny#
+After we tested the charts, we can build into Shiny app. The only extra step is to layout the charts.
