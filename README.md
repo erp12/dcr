@@ -41,3 +41,15 @@ mydcr + chart1 + chart2 + chart3
 
 #Work with Shiny#
 After we tested the charts, we can build into Shiny app. The only extra step is to layout the charts.
+
+#Function Calls#
+## Function to create empty chart object with data##
+dcr(data)
+
+##Function to create a chart to add to chart object##
+### type: chart type such as pieChart, barChart
+### id: div id to display in the web page (layout divs in ui.R in shiny for each chart to display in)
+### dimension: dimension (which variable to group with)
+### reduce: how records are reduced for each group of dimension (reduceCount() to count number of obs, reduceSum(y) to sum up values of y)
+### ...: additional arguments such as width, height 
+dcrchart(type, id, dimension, reduce, ...)
