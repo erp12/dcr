@@ -3,11 +3,13 @@ dcr <- setClass("dcr",
                 slots = list(data = "data.frame",
                              charts = "list"))
 
-## initilize dcr class
-setMethod("initialize", "dcr", function(.Object, data) {
-  .Object@data <- data
-  .Object
-})
+##' Create dc visulization object
+##' @param data the data used to visulize
+##' @param charts a list of dc charts in the visulization
+##'
+dcr <- function(data, charts = list()) {
+  new("dcr", data = data, charts = charts)
+}
 
 ## show method for dcr class
 setMethod("show", "dcr",
@@ -21,7 +23,8 @@ html <- function(object, divs = FALSE) {
   mhtml <- list()
   mhtml$head <- "<script type=\"text/javascript\">"
   ## code part for data
-  mhtml$code_data <- sprintf("var data = %s;\nvar ndx = crossfilter(data);", jsonlite:::toJSON(object@data))
+  mhtml$code_data <- sprintf("var data = %s;\n%s\nvar ndx = crossfilter(data);",
+                             jsonlite:::toJSON(object@data), datefmt(object@data))
   ## chart definitions
   mhtml$chart_code <- paste(sapply(object@charts, chart_def), collapse = "\n")
   mhtml$dim_code <- paste(sapply(object@charts, dimension_def), collapse = "\n")
@@ -46,14 +49,20 @@ dcrchart <- setClass("dcrchart",
                                   reduce = "character",
                                   opts = "list"))
 
-setMethod("initialize", "dcrchart", function(.Object, type, id, dimension, reduce, ...) {
-  .Object@type <- type
-  .Object@id <- id
-  .Object@dimension <- dimension
-  .Object@reduce <- reduce
-  .Object@opts <- list(...)
-  .Object
-})
+##' Function to create a dc chart
+##' @param type chart type such as pieChart, barChart etc
+##' @param id chart div id
+##' @param dimension chart dimension
+##' @param reduce chart reduce function
+##' @param width chart width, e.g. 400
+##' @param height chart height, e.g. 600
+##' @param ... additional chart options
+##'
+dcrchart <- function(type, id, dimension, reduce, width, height, ...) {
+  opts <- c(list(width = width, height = height), list(...))
+  new("dcrchart", type = type, id = id, dimension = dimension,
+      reduce = reduce, opts = opts)
+}
 
 ## function to convert dcrchart to html code blocks
 chart_def <- function(e) sprintf("var chart%s = dc.%s(\"#%s\");", e@id, e@type, e@id)
@@ -73,7 +82,16 @@ chartcodes <- function(e) {
   s2 <- paste0(names(s2), "(", s2, ")", collapse = ".")
   paste(s1, s2, sep = ".")
 }
-
+datefmt <- function(data) {
+  date_vars <- sapply(names(data), function(x) class(data[[x]]))
+  date_vars <- names(date_vars)[date_vars=="Date"]
+  if (length(date_vars) == 0) return("")
+  rep_str <- sprintf("\td.%s = d3.time.format('%%Y-%%m-%%d').parse(d.%s);", date_vars, date_vars)
+  rep_str <- paste0(rep_str, collapse="\n")
+  sprintf("data.forEach(function (d) {
+%s
+})", rep_str)
+}
 ## define "+" method-----------------------------------------------------------------------------------
 setMethod("+", signature("dcr", "dcrchart"), function(e1, e2) {
   e1@charts[[e2@id]] <- e2
@@ -87,6 +105,10 @@ x_linear <- function(xlim = NULL) {
 x_ordinal <- function(levels = NULL) {
   if (is.null(levels)) return(dc_code("d3.scale.ordinal()"))
   dc_code(sprintf("d3.scale.ordinal().domain(%s)", js(levels)))
+}
+x_time <- function(daterange) {
+  drange <- sprintf('new Date("%s")', format(daterange, "%m/%d/%Y"))
+  dc_code(sprintf("d3.time.scale().domain([%s, %s])", drange[1], drange[2]))
 }
 
 ## wrapper function for reduce functions---------------------------------------------------------------
