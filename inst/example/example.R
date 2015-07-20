@@ -2,12 +2,13 @@
 data <- read.csv("inst/example/data/morley.csv")
 data <- within(data, {dist <- Speed * Run / 1000})
 mydcr <- dcr(data)
-barchart <- dcrchart("barChart", "xx", "Run", reduceSum("dist"), width = 500, height = 480, x = x_linear(c(6, 20)),
+barchart <- dcrchart("barChart", "xx", "Run", reduceMean("dist"), width = 500, height = 480,
                      yAxisLabel = "My y axis label" )
-linchart <- dcrchart("lineChart", "test", "Run", reduceSum("dist"), width = 600,  height = 500,
-                     x = x_linear(c(0, 20)))
+linchart <- dcrchart("lineChart", "test", "Run", reduceSum("dist"), width = 600,  height = 500)
 mydcr + barchart
 mydcr + linchart
+
+
 
 ## line chart
 linechart <- dcrchart("lineChart", "yy", Run, reduceSum(dist)) + width(768) +
@@ -34,6 +35,7 @@ data <- read.csv("inst/example/data/ndx.csv")
 data <- within(data, {
   Loss_Gain <- ifelse(open > close, "Loss", "Gain")
   date <- as.Date(date, "%m/%d/%Y")
+  datem <- floor_date(date, "month")
   quarter <- quarters(date)
   weekday <- paste0(wday(date), ".", weekdays(date, TRUE))
   fluctuation <- round((close - open)/open*100)
@@ -43,6 +45,10 @@ data <- within(data, {
   Index <- (open + close)/2
 })
 mydcr <- dcr(data)
+
+mydcr + dcrchart("lineChart", "hello", "datem", reduceMean("volume"), 1000, 400, renderArea = TRUE, colors = c("#39e639"),
+                 stack = reduceMean("fluctuation"))
+
 
 chart1 <- dcrchart("pieChart", "chart1", "Loss_Gain", reduceCount(), width = 180, height = 180, radius = 80)
 

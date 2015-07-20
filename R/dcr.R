@@ -63,7 +63,7 @@ dcrchart <- function(type, id, dimension, reduce, width, height, ...) {
   opts <- list(...)
   ## if reduce function is reduce mean, then attach valueAccessor
   rmean <- attr(reduce, "reduceMean", exact = TRUE)
-  if (!(is.null(rmean) | "valueAccessor" %in% opts)) {
+  if (!(is.null(rmean) | "valueAccessor" %in% names(opts))) {
     auto_opts[["valueAccessor"]] <- pluck_value("avg")
   }
   opts <- c(list(width = width, height = height), auto_opts, opts)
@@ -101,6 +101,24 @@ datefmt <- function(data) {
 }
 ## define "+" method-----------------------------------------------------------------------------------
 setMethod("+", signature("dcr", "dcrchart"), function(e1, e2) {
+  ## Automatically attach x axis definition
+  if (e2@type %in% c("barChart", "lineChart")) {
+    if (!("x" %in% names(e2@opts))) {
+      value <- e1@data[[e2@dimension]]
+      vtype <- ifelse(is.numeric(value), "numeric", class(value))
+      if (vtype == "numeric") {
+        e2@opts[["x"]] <- x_linear(range(value))
+      } else if (vtype == "character") {
+        e2@opts[["x"]] <- x_ordinal(sort(unique(value)))
+        if (!("xUnits" %in% names(e2@opts))) e2@opts[["xUnits"]] <- dc_code("dc.units.ordinal")
+      } else if (vtype == "factor") {
+        e2@opts[["x"]] <- x_ordinal(levels(value))
+        if (!("xUnits" %in% names(e2@opts))) e2@opts[["xUnits"]] <- dc_code("dc.units.ordinal")
+      } else if (vtype == "Date") {
+        e2@opts[["x"]] <- x_time(range(value))
+      }
+    }
+  }
   e1@charts[[e2@id]] <- e2
   e1
 })
@@ -128,6 +146,9 @@ reduceSum <- function(var) dc_code(sprintf("reduceSum(function(d) {return d.%s;}
 ##'
 reduceCount <- function() dc_code("reduceCount()")
 
+##' Reduce function to calculate mean of a variable for each group
+##' @param var the name of the variable to calculate mean
+##'
 reduceMean <- function(var) {
   code <- sprintf("reduce(function (p, v) {
   ++p.count;
