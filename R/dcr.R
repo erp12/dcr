@@ -59,7 +59,14 @@ dcrchart <- setClass("dcrchart",
 ##' @param ... additional chart options
 ##'
 dcrchart <- function(type, id, dimension, reduce, width, height, ...) {
-  opts <- c(list(width = width, height = height), list(...))
+  auto_opts <- list()
+  opts <- list(...)
+  ## if reduce function is reduce mean, then attach valueAccessor
+  rmean <- attr(reduce, "reduceMean", exact = TRUE)
+  if (!(is.null(rmean) | "valueAccessor" %in% opts)) {
+    auto_opts[["valueAccessor"]] <- pluck_value("avg")
+  }
+  opts <- c(list(width = width, height = height), auto_opts, opts)
   new("dcrchart", type = type, id = id, dimension = dimension,
       reduce = reduce, opts = opts)
 }
@@ -112,8 +119,40 @@ x_time <- function(daterange) {
 }
 
 ## wrapper function for reduce functions---------------------------------------------------------------
+##' Reduce function to calculate sum of a variable for each group
+##' @param var the name of the variable to sum over
+##'
 reduceSum <- function(var) dc_code(sprintf("reduceSum(function(d) {return d.%s;})", var))
+
+##' Reduce function to count number of records for each group
+##'
 reduceCount <- function() dc_code("reduceCount()")
+
+reduceMean <- function(var) {
+  code <- sprintf("reduce(function (p, v) {
+  ++p.count;
+  p.sum += v.%s;
+  p.avg = p.sum / p.count;
+  return p;
+},
+  function (p, v) {
+    --p.count;
+    p.sum -= v.%s;
+    p.avg = p.sum / p.count;
+    return p;
+  },
+  function () {
+    return {
+      count: 0,
+      sum: 0
+    };
+  })
+", var, var)
+  attr(code, "reduceMean") <- var
+  code
+}
+
+
 fsum <- function(x) sprintf("+v.%s", x)
 fratio <- function(x, y) sprintf("p.%s / p.%s", x, y)
 reducefun <- function(...) {
