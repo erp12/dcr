@@ -168,14 +168,17 @@ reduceMean <- function(var) {
   function (p, v) {
     --p.count;
     p.sum -= v.%s;
-    p.avg = p.sum / p.count;
+    if (p.count == 0) {
+       p.avg = 0;
+    } else {
+       p.avg = p.sum / p.count;
+    }
     return p;
   },
   function () {
     return {
       count: 0,
-      sum: 0,
-      avg: 0
+      sum: 0
     };
   })
 ", var, var)
