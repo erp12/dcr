@@ -3,41 +3,74 @@ dc.js and crossfilter are quite useful for visualization and exploratory analysi
 
 # Installation #
 ###Prerequisite: install necessary packages###
-<pre><code>install.packages("devtools")
+
+```
+#!r
+install.packages("devtools")
 install.packages("shiny")
-install.packages("jsonlite")</code></pre>
+install.packages("jsonlite")
+```
+
 
 ###Download this repository and open dcr.Rproj###
 ### Install this dcr package###
 
-<pre><code>library(devtools)
+
+```
+#!r
+library(devtools)
 load_all()
-install()</code></pre>
+install()
+```
 
 # Draw simple dc.js charts#
 We will use the mtcars data to make some simple charts
 
-<pre><code>library(dcr)
-</code></pre>
+
+```
+#!r
+library(dcr)
+```
+
 
 ###Create chart object###
-<pre><code>mydcr <- dcr(mtcars)
-</code></pre>
+
+```
+#!r
+mydcr <- dcr(mtcars)
+```
 
 ###Add a pie chart###
-<pre><code>chart1 <- dcrchart("pieChart", "chart1", "cyl", reduceCount(), width = 250, height = 250)
-</code></pre>
+
+```
+#!r
+chart1 <- dcrchart("pieChart", "chart1", "cyl", reduceCount(), width = 250, height = 250)
+```
+
 
 ###Add a bar chart###
-<pre><code>chart2 <- dcrchart("lineChart", "chart2", "mpg", reduceSum("wt"), width = 400, height = 250,
+
+```
+#!r
+chart2 <- dcrchart("lineChart", "chart2", "mpg", reduceSum("wt"), width = 400, height = 250,
                    xAxisLabel = "Gear", yAxisLabel = "Total Weight")
-</code></pre>
+```
+
 ###Add a row chart###
-<pre><code>chart3 <- dcrchart("rowChart", "chart3", "carb", reduceCount(), width = 300, height = 250)
-</code></pre>
+
+```
+#!r
+chart3 <- dcrchart("rowChart", "chart3", "carb", reduceCount(), width = 300, height = 250)
+```
+
 
 ###Finally we can see the charts###
-<pre><code>mydcr + chart1 + chart2 + chart3</code></pre>
+
+```
+#!r
+mydcr + chart1 + chart2 + chart3
+```
+
 
 #Work with Shiny#
 After we tested the charts, we can build into Shiny app. The only extra step is to layout the charts.
@@ -54,4 +87,4 @@ After we tested the charts, we can build into Shiny app. The only extra step is 
 * __reduce__: how records are reduced for each group of dimension (reduceCount() to count number of obs, reduceSum(y) to sum up values of y)
 * __width__: chart width
 * __height__: chart height
-* __...__: additional chart arguments 
+* __...__: additional chart arguments
