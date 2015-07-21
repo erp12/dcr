@@ -52,8 +52,8 @@ chart1 <- dcrchart("pieChart", "chart1", "cyl", reduceCount(), width = 250, heig
 
 ```
 #!r
-chart2 <- dcrchart("lineChart", "chart2", "mpg", reduceSum("wt"), width = 400, height = 250,
-                   xAxisLabel = "Gear", yAxisLabel = "Total Weight")
+chart2 <- dcrchart("lineChart", "chart2", "mpg", reduceMean("wt"), width = 400, height = 250,
+                   xAxisLabel = "Gear", yAxisLabel = "Average Weight")
 ```
 
 ###Add a row chart###
