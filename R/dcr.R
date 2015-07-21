@@ -186,6 +186,23 @@ reduceMean <- function(var) {
   code
 }
 
+##' Add link to reset filter
+##' @param id chart id the reset link used to reset
+##' @param name what the link appears as, default is "reset", used in ui.R
+dc_reset <- function(id, name = "reset") {
+  list(shiny::a(name,
+            class = "reset",
+            href = sprintf('javascript:chart%s.filterAll();dc.redrawAll();', id),
+            style = "display: none;"),
+       shiny::div(class = "clearfix")
+  )
+}
+
+##' Add link to reset all filters
+##' @param name what the link appears as, default is "reset", used in ui.R
+dc_resetAll <- function(name = "Reset All") {
+  shiny::div(shiny::a(name, href = "javascript:dc.filterAll(); dc.renderAll();"))
+}
 
 fsum <- function(x) sprintf("+v.%s", x)
 fratio <- function(x, y) sprintf("p.%s / p.%s", x, y)
