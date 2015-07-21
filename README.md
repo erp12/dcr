@@ -3,57 +3,55 @@ dc.js and crossfilter are quite useful for visualization and exploratory analysi
 
 # Installation #
 ###Prerequisite: install necessary packages###
-install.packages("devtools")
-
+<pre><code>install.packages("devtools")
 install.packages("shiny")
-
-install.packages("jsonlite")
+install.packages("jsonlite")</code></pre>
 
 ###Download this repository and open dcr.Rproj###
 ### Install this dcr package###
-library(devtools)
 
+<pre><code>library(devtools)
 load_all()
-
-install()
+install()</code></pre>
 
 # Draw simple dc.js charts#
 We will use the mtcars data to make some simple charts
 
-library(dcr)
+<pre><code>library(dcr)
+</code></pre>
 
 ###Create chart object###
-mydcr <- dcr(mtcars)
+<pre><code>mydcr <- dcr(mtcars)
+</code></pre>
 
 ###Add a pie chart###
-chart1 <- dcrchart("pieChart", "chart1", "cyl", reduceCount(), width = 200, height = 200)
+<pre><code>chart1 <- dcrchart("pieChart", "chart1", "cyl", reduceCount(), width = 250, height = 250)
+</code></pre>
 
 ###Add a bar chart###
-chart2 <- dcrchart("barChart", "chart2", "gear", reduceSum("wt"), 
-                   width = 300, height = 200, x = x_ordinal(), xUnits = dc_code("dc.units.ordinal"),
+<pre><code>chart2 <- dcrchart("lineChart", "chart2", "mpg", reduceSum("wt"), width = 400, height = 250,
                    xAxisLabel = "Gear", yAxisLabel = "Total Weight")
-
+</code></pre>
 ###Add a row chart###
-chart3 <- dcrchart("rowChart", "chart3", "carb", reduceCount(), width = 300, height = 200)
+<pre><code>chart3 <- dcrchart("rowChart", "chart3", "carb", reduceCount(), width = 300, height = 250)
+</code></pre>
 
 ###Finally we can see the charts###
-mydcr + chart1 + chart2 + chart3
+<pre><code>mydcr + chart1 + chart2 + chart3</code></pre>
 
 #Work with Shiny#
 After we tested the charts, we can build into Shiny app. The only extra step is to layout the charts.
 
 #Function Calls#
-## Function to create empty chart object with data##
+## Function definition to create empty chart object with data##
 ###dcr(data)###
 
-##Function to create a chart to add to chart object##
-###dcrchart(type, id, dimension, reduce, ...) ###
-type: chart type such as pieChart, barChart
-
-id: div id to display in the web page (layout divs in ui.R in shiny for each chart to display in)
-
-dimension: dimension (which variable to group with)
-
-reduce: how records are reduced for each group of dimension (reduceCount() to count number of obs, reduceSum(y) to sum up values of y)
-
-...: additional arguments such as width, height 
+##Function function definition to create a chart to add to chart object##
+###dcrchart(type, id, dimension, reduce, width, height, ...) ###
+* __type__: chart type such as pieChart, barChart
+* __id__: div id to display in the web page (layout divs in ui.R in shiny for each chart to display in)
+* __dimension__: dimension (which variable to group with)
+* __reduce__: how records are reduced for each group of dimension (reduceCount() to count number of obs, reduceSum(y) to sum up values of y)
+* __width__: chart width
+* __height__: chart height
+* __...__: additional chart arguments 
