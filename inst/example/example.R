@@ -46,9 +46,12 @@ data <- within(data, {
 })
 mydcr <- dcr(data)
 
-mydcr + dcrchart("lineChart", "hello", "datem", reduceMean("volume"), 1000, 400, renderArea = TRUE, colors = c("#39e639"),
-                 stack = reduceMean("fluctuation"))
-
+mydcr + dcrchart("lineChart", "hello", "datem", reduceSum("volume"), 1000, 400, rangeChart = dc_code("chartbbb"))+
+dcrchart("barChart", "bbb", "datem", reduceSum("volume"), 900, 250,
+         round=dc_code("d3.time.month.round"), alwaysUseRounding=TRUE,
+         xUnits=dc_code("d3.time.months"),
+         margins = list(top=0, right=50, bottom=20, left = 40),
+         centerBar=TRUE, gap=1)
 
 chart1 <- dcrchart("pieChart", "chart1", "Loss_Gain", reduceCount(), width = 180, height = 180, radius = 80)
 

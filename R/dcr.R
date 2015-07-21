@@ -31,7 +31,7 @@ html <- function(object, divs = FALSE) {
   mhtml$red_code <- paste(sapply(object@charts, reduce_def), collapse = "\n")
   ## codes for each chart
   mhtml$codes <- paste(sapply(object@charts, chartcodes), collapse = "\n")
-  mhtml$tail <- "dc.renderAll();\n</script>"
+  mhtml$tail <- "dc.renderAll();\ndc.redrawAll();\n</script>"
   mhtml <-  paste(unlist(mhtml), collapse = "\n")
   if (divs) {
     code_div <- sapply(object@charts, function(x) sprintf("<div id=\"%s\"></div>", x@id))
@@ -63,7 +63,7 @@ dcrchart <- function(type, id, dimension, reduce, width, height, ...) {
   opts <- list(...)
   ## if reduce function is reduce mean, then attach valueAccessor
   rmean <- attr(reduce, "reduceMean", exact = TRUE)
-  if (!(is.null(rmean) | "valueAccessor" %in% names(opts))) {
+  if (!(is.null(rmean) || "valueAccessor" %in% names(opts))) {
     auto_opts[["valueAccessor"]] <- pluck_value("avg")
   }
   opts <- c(list(width = width, height = height), auto_opts, opts)
@@ -99,13 +99,18 @@ datefmt <- function(data) {
 %s
 })", rep_str)
 }
+rowchart_order <- function(x) {
+  codes <- sprintf('if (d.key == "%s") return %s;\n', levels(x), seq_along(levels(x)))
+  codes <- paste0(codes, collapse = "")
+  dc_code(sprintf("function(d) {%s}", codes))
+}
 ## define "+" method-----------------------------------------------------------------------------------
 setMethod("+", signature("dcr", "dcrchart"), function(e1, e2) {
+  value <- e1@data[[e2@dimension]]
+  vtype <- ifelse(is.numeric(value), "numeric", class(value))
   ## Automatically attach x axis definition
   if (e2@type %in% c("barChart", "lineChart")) {
     if (!("x" %in% names(e2@opts))) {
-      value <- e1@data[[e2@dimension]]
-      vtype <- ifelse(is.numeric(value), "numeric", class(value))
       if (vtype == "numeric") {
         e2@opts[["x"]] <- x_linear(range(value))
       } else if (vtype == "character") {
@@ -118,6 +123,10 @@ setMethod("+", signature("dcr", "dcrchart"), function(e1, e2) {
         e2@opts[["x"]] <- x_time(range(value))
       }
     }
+  }
+  ## Automatically ording for rowChart if dimension variable is a factor
+  if (e2@type == "rowChart" && !("ordering" %in% names(e2@opts)) && vtype == "factor") {
+    e2@opts[["ordering"]] <- rowchart_order(value)
   }
   e1@charts[[e2@id]] <- e2
   e1
