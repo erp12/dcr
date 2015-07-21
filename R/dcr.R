@@ -174,7 +174,8 @@ reduceMean <- function(var) {
   function () {
     return {
       count: 0,
-      sum: 0
+      sum: 0,
+      avg: 0
     };
   })
 ", var, var)
