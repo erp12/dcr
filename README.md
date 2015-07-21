@@ -10,12 +10,8 @@ install.packages("devtools")
 install.packages("shiny")
 install.packages("jsonlite")
 ```
-
-
 ###Download this repository and open dcr.Rproj###
 ### Install this dcr package###
-
-
 ```
 #!r
 library(devtools)
@@ -25,8 +21,6 @@ install()
 
 # Draw simple dc.js charts#
 We will use the mtcars data to make some simple charts
-
-
 ```
 #!r
 library(dcr)
@@ -34,22 +28,18 @@ library(dcr)
 
 
 ###Create chart object###
-
 ```
 #!r
 mydcr <- dcr(mtcars)
 ```
 
 ###Add a pie chart###
-
 ```
 #!r
 chart1 <- dcrchart("pieChart", "chart1", "cyl", reduceCount(), width = 250, height = 250)
 ```
 
-
 ###Add a bar chart###
-
 ```
 #!r
 chart2 <- dcrchart("lineChart", "chart2", "mpg", reduceMean("wt"), width = 400, height = 250,
@@ -57,20 +47,16 @@ chart2 <- dcrchart("lineChart", "chart2", "mpg", reduceMean("wt"), width = 400, 
 ```
 
 ###Add a row chart###
-
 ```
 #!r
 chart3 <- dcrchart("rowChart", "chart3", "carb", reduceCount(), width = 300, height = 250)
 ```
 
-
 ###Finally we can see the charts###
-
 ```
 #!r
 mydcr + chart1 + chart2 + chart3
 ```
-
 
 #Work with Shiny#
 After we tested the charts, we can build into Shiny app. The only extra step is to layout the charts.
