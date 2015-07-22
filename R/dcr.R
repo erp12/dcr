@@ -224,6 +224,15 @@ dc_resetAll <- function(name = "Reset All") {
   shiny::div(shiny::a(name, href = "javascript:dc.filterAll(); dc.renderAll();"))
 }
 
+##' Create legend options
+##' @param ... legend options, e.g. x, y, itemHeigh, gap
+##'
+legend <- function(...) {
+  l <- list(...)
+  s1 <- paste0(names(l), "(", sapply(l, js), ")", collapse = ".")
+  dc_code(sprintf("dc.legend().%s", s1))
+}
+
 fsum <- function(x) sprintf("+v.%s", x)
 fratio <- function(x, y) sprintf("p.%s / p.%s", x, y)
 reducefun <- function(...) {
