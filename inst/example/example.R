@@ -6,7 +6,7 @@ barchart <- dcrchart("barChart", "xx", "Run", reduceMean("dist"), width = 500, h
                      yAxisLabel = "My y axis label" )
 linchart <- dcrchart("lineChart", "test", "Run", reduceSum("dist"), width = 600,  height = 500)
 mydcr + barchart
-mydcr + linchart
+mydcr + linchart + barchart
 
 
 
@@ -124,9 +124,22 @@ mychart <- dcrchart("barChart", "test", "name", reduceSum("cnt"), width = 768, h
 mydcr + mychart
 
 
+## stack not working
+mydcr <- dcr(mtcars)
 
+mydcr + dcrchart("barChart", "aa", "cyl", reduceSum("am"), 500, 300)  +
+  dcrchart("dataTable", "bb", "cyl", dc_code(""), group = dc_code("function(d) {return d.am}"), 800, 500, columns = c("cyl", "gear"), size = 200)
 
-
-
+## geo json
+data <- read.csv("inst/example/data/vc.csv", stringsAsFactors = F)
+mydcr <- dcr(data)
+bar <- dcrchart("barChart", "myb", "State", reduceSum("Deals"), 990, 500)
+geochart <- dcrchart("geoChoroplethChart", "mychart", "State", reduceSum("Deals"), 990, 500,
+                     colors = dc_code('d3.scale.quantize().range(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"])'),
+                     colorDomain = c(0, 20),
+                     colorCalculator = dc_code("function (d) { return d ? chartmychart.colors()(d) : '#ccc'; }"),
+                     overlayGeoJson = geojson("geojson/us-states.json", "state", "function(d) {return d.properties.name;}"))
+d <- mydcr + geochart + bar
+d
 
 

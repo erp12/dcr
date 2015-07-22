@@ -1,6 +1,7 @@
 chartOutput <- function(outputId) {
   suppressMessages(singleton(addResourcePath("js", system.file('js', package='dcr'))))
   suppressMessages(singleton(addResourcePath("css", system.file('css', package='dcr'))))
+  suppressMessages(singleton(addResourcePath("geojson", system.file('geojson', package='dcr'))))
   div(class = "dc-chart",
       # Add javascript sources to header
       tagList(

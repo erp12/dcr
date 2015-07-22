@@ -84,11 +84,20 @@ js <- function(x, ...) {
   jsonlite:::toJSON(x, auto_unbox = TRUE, ...)
 }
 chartcodes <- function(e) {
-  s1 <- sprintf("chart%s.dimension(%sDim).group(%sGroup)", e@id, e@id, e@id)
+  ## special handling for geoChoroplethChart
+  s1 <- ""
+  if (e@type == "geoChoroplethChart") {
+    ovlay <- e@opts$overlayGeoJson
+    s1 <- ovlay$jsondata
+    e@opts$overlayGeoJson <- ovlay$jsonopts
+  }
+  s1 <- paste0(s1, sprintf("chart%s.dimension(%sDim).group(%sGroup)", e@id, e@id, e@id))
   s2 <- sapply(e@opts, js)
   s2 <- paste0(names(s2), "(", s2, ")", collapse = ".")
+  if (e@type == "geoChoroplethChart") s2 <- paste0(s2, ";dc.renderAll();});")
   paste(s1, s2, sep = ".")
 }
+
 datefmt <- function(data) {
   date_vars <- sapply(names(data), function(x) class(data[[x]]))
   date_vars <- names(date_vars)[date_vars=="Date"]
@@ -196,6 +205,17 @@ dc_reset <- function(id, name = "reset") {
             style = "display: none;"),
        shiny::div(class = "clearfix")
   )
+}
+
+##' Define overlayGeoJson for geoChoropleth chart
+##' @param jsonfile path for geojson file
+##' @param name name of the layer
+##' @param keyAccessor accessor function used to extract "key" from GeoJson data
+##'
+geojson <- function(jsonfile, name, keyAccessor) {
+  jsondata <- sprintf('d3.json("%s", function (overjson) {', jsonfile)
+  jsonopts <- dc_code(sprintf('overjson.features, "%s", %s', name, keyAccessor))
+  list(jsondata = jsondata, jsonopts = jsonopts)
 }
 
 ##' Add link to reset all filters
