@@ -227,7 +227,7 @@ dc_resetAll <- function(name = "Reset All") {
 ##' Create legend options
 ##' @param ... legend options, e.g. x, y, itemHeigh, gap
 ##'
-legend <- function(...) {
+dc_legend <- function(...) {
   l <- list(...)
   s1 <- paste0(names(l), "(", sapply(l, js), ")", collapse = ".")
   dc_code(sprintf("dc.legend().%s", s1))

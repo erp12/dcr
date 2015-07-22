@@ -143,4 +143,4 @@ d <- mydcr + geochart + bar
 d
 
 ## legend
-dcr(mtcars) + dcrchart("pieChart", "bb", "gear", reduceCount(), 400, 400, legend = legend(x = 180, y = 180), innerRadius = 100)
+dcr(mtcars) + dcrchart("pieChart", "bb", "gear", reduceCount(), 400, 400, legend = dc_legend(x = 180, y = 180), innerRadius = 100)
