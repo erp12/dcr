@@ -28,7 +28,7 @@ mydcr <- dcr(mtcars)
 chart1 <- dcrchart("pieChart", "chart1", "cyl", reduceCount(), width = 250, height = 250)
 ```
 
-###Add a bar chart###
+###Add a line chart###
 ```
 #!r
 chart2 <- dcrchart("lineChart", "chart2", "mpg", reduceMean("wt"), width = 400, height = 250,
