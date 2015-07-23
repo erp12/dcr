@@ -10,13 +10,10 @@ install.packages("devtools")
 install.packages("shiny")
 install.packages("jsonlite")
 ```
-###Download this repository and open dcr.Rproj###
 ### Install this dcr package###
 ```
 #!r
-library(devtools)
-load_all()
-install()
+devtools:::install_bitbucket("massmutual/dc_charts_r_shiny")
 ```
 
 # Draw simple dc.js charts#
