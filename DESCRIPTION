@@ -1,10 +1,11 @@
 Package: dcr
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Interactive Multivariate Visulization Using dc.js and crossfilter
 Version: 0.1
 Date: 2015-06-25
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Xiangdong Gu
+Maintainer: Xiangdong Gu <xgu@massmutual.com>
+Description: This package allows to create interactive multivariate charts using dc.js and crossfilter.js embed into shiny apps.
+License: MIT
 LazyData: TRUE
+Imports: shiny, jsonlite

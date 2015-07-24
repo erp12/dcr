@@ -124,11 +124,17 @@ mychart <- dcrchart("barChart", "test", "name", reduceSum("cnt"), width = 768, h
 mydcr + mychart
 
 
-## stack not working
+## data table
 mydcr <- dcr(mtcars)
 
 mydcr + dcrchart("barChart", "aa", "cyl", reduceSum("am"), 500, 300)  +
   dcrchart("dataTable", "bb", "cyl", dc_code(""), group = dc_code("function(d) {return d.am}"), 800, 500, columns = c("cyl", "gear"), size = 200)
+
+##stackable table
+mydcr <- dcr(mtcars)
+mydcr + dcrchart("lineChart", "aa", "cyl", reduceSum("am"), 500, 300, stack = dc_code("aaGroup "),
+                  renderArea = TRUE, legend = dc_legend(x = 350, y=0),stack = dc_code("aaGroup,"))
+
 
 ## geo json
 data <- read.csv("inst/example/data/vc.csv", stringsAsFactors = F)
