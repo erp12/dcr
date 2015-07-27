@@ -4,8 +4,9 @@ data <- within(data, {dist <- Speed * Run / 1000})
 mydcr <- dcr(data)
 barchart <- dcrchart("barChart", "xx", "Run", reduceMean("dist"), width = 500, height = 480,
                      yAxisLabel = "My y axis label" )
-linchart <- dcrchart("lineChart", "test", "Run", reduceSum("dist"), width = 600,  height = 500)
-mydcr + barchart
+linchart <- dcrchart("lineChart", "test", "Run", reduceSum("dist"), width = 200,  height = 150,
+                     xAxis = x_axis(ticks = 3), yAxis = y_axis(ticks = 5))
+mydcr + linchart
 mydcr + linchart + barchart
 
 
