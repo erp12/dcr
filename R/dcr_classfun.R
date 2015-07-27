@@ -40,7 +40,6 @@ html <- function(object, divs = FALSE) {
   nochain <- c()
   for (id in names(object@charts)) {
     object@charts[[id]] <- auto_opts(object@charts[[id]], object)
-    object@charts[[id]] <- stack_opts(object@charts[[id]])
     xaxis <- object@charts[[id]]@opts[["xAxis"]]
     yaxis <- object@charts[[id]]@opts[["yAxis"]]
     if (!is.null(xaxis)) {
@@ -62,6 +61,8 @@ html <- function(object, divs = FALSE) {
   mhtml$chart_code <- paste(sapply(object@charts, chart_def), collapse = "\n")
   mhtml$dim_code <- paste(sapply(object@charts, dimension_def), collapse = "\n")
   mhtml$red_code <- paste(sapply(object@charts, reduce_def, object = object), collapse = "\n")
+  for (id in names(object@charts)) object@charts[[id]] <- stack_opts(object@charts[[id]])
+
   ## codes for each chart
   mhtml$codes <- paste(sapply(object@charts, chartcodes, object = object), collapse = "\n")
   mhtml$nochain <- nochain
@@ -103,7 +104,7 @@ use_dimension <- function(id) {
 
 ## Functions not to export-------------------------------------------------------------------------------
 ## generate code part for chart definitions
-chart_def <- function(e) sprintf("var chart%s = dc.%s(\"#%s\");\n", e@id, e@type, e@id)
+chart_def <- function(e) sprintf("var chart%s = dc.%s(\"#%s\");", e@id, e@type, e@id)
 
 ## generate code part for dimension definitions
 dimension_def <- function(e) {
@@ -119,7 +120,7 @@ reduce_def <- function(e, object) {
   reduces <- ifelse(reduces == "", reduces, paste0(".", reduces))
   reduceids <- ""
   if (length(reduces) > 1) reduceids <- c("", paste0("stack", seq_along(reduces[-1])))
-  s <- sprintf("var %sGroup%s = %sDim.group().%s;", e@id, reduceids, dimid, e@reduce)
+  s <- sprintf("var %sGroup%s = %sDim.group()%s;", e@id, reduceids, dimid, reduces)
   paste0(s, collapse = "\n")
 }
 

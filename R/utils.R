@@ -115,3 +115,8 @@ y_axis <- function(...) {
   s1 <- paste0(names(l), "(", sapply(l, js), ")", collapse = ".")
   sprintf("yAxis().%s", s1)
 }
+
+##' Get chart name from chart id
+##' @param id chart id
+##' @export
+chartname <- function(id) dc_code(sprintf("chart%s", id))
