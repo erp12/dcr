@@ -4,7 +4,7 @@ dc.js and crossfilter are quite useful for visualization and exploratory analysi
 # Installation #
 ```
 if (!require(devtools)) install.packages("devtools")
-devtools:::install_bitbucket("massmutual/dc_charts_r_shiny")
+devtools:::install_github("massmutual/dcr")
 ```
 
 # Draw simple dc.js charts#
