@@ -120,3 +120,15 @@ y_axis <- function(...) {
 ##' @param id chart id
 ##' @export
 chartname <- function(id) dc_code(sprintf("chart%s", id))
+
+##' Get a variable in the key
+##' @param var variable
+##' @export
+##' 
+pluck_key <- function(var) simple_fun(sprintf("d.key.%s"), var)
+
+##' Get a variable in the value
+##' @param var variable
+##' @export
+##' 
+pluck_value <- function(var) simple_fun(sprintf("d.value.%s"), var)
