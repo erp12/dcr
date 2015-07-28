@@ -3,7 +3,6 @@ dc.js and crossfilter are quite useful for visualization and exploratory analysi
 
 # Installation #
 ```
-#!r
 if (!require(devtools)) install.packages("devtools")
 devtools:::install_bitbucket("massmutual/dc_charts_r_shiny")
 ```
@@ -11,39 +10,33 @@ devtools:::install_bitbucket("massmutual/dc_charts_r_shiny")
 # Draw simple dc.js charts#
 We will use the mtcars data to make some simple charts
 ```
-#!r
 library(dcr)
 ```
 
 
 ###Create chart object###
 ```
-#!r
 mydcr <- dcr(mtcars)
 ```
 
 ###Add a pie chart###
 ```
-#!r
 chart1 <- dcrchart("pieChart", "chart1", "cyl", reduceCount(), width = 250, height = 250)
 ```
 
 ###Add a line chart###
 ```
-#!r
 chart2 <- dcrchart("lineChart", "chart2", "mpg", reduceMean("wt"), width = 400, height = 250,
                    xAxisLabel = "Gear", yAxisLabel = "Average Weight")
 ```
 
 ###Add a row chart###
 ```
-#!r
 chart3 <- dcrchart("rowChart", "chart3", "carb", reduceCount(), width = 300, height = 250)
 ```
 
 ###Finally we can see the charts###
 ```
-#!r
 mydcr + chart1 + chart2 + chart3
 ```
 

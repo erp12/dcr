@@ -5,7 +5,7 @@ Version: 0.1
 Date: 2015-06-25
 Authors@R: c(
     person("Xiangdong", "Gu", email = "xgu@massmutual.com", role = "cre"),
-    person("MassMutual Data Science", comment = "http://datascience.massmutual.com", role = "aut"))
+    person("MassMutual Financial Group", comment = "http://datascience.massmutual.com", role = "aut"))
 Maintainer: Xiangdong Gu <xgu@massmutual.com>
 Description: This package allows to create interactive multivariate charts using dc.js and crossfilter.js embed into shiny apps.
 License: MIT
