@@ -28,7 +28,7 @@ chartOutput <- function(outputId) {
   div(class = "dc-chart",
       # Add javascript sources to header
       tagList(
-        singleton(tags$head(tags$script(src = "http://d3js.org/d3.v3.min.js", charset = "utf-8", type='text/javascript'))),
+        singleton(tags$head(tags$script(src = "js/d3.js", charset="utf-8", type='text/javascript'))),
         singleton(tags$head(tags$script(src = "js/crossfilter.js", type='text/javascript'))),
         singleton(tags$head(tags$script(src = "js/dc.js", type='text/javascript'))),
         singleton(tags$head(tags$link(rel = "stylesheet", type='text/css', href = 'css/dc.css')))
