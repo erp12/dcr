@@ -8,7 +8,7 @@ devtools:::install_github("massmutual/dcr")
 ```
 
 # Usage #
-'''
+```
 #We will use the mtcars data to make some simple charts
 library(dcr)
 
@@ -28,7 +28,7 @@ chart3 <- dcrchart("rowChart", "chart3", "carb", reduceCount(), width = 300, hei
 
 #view the charts
 mydcr + chart1 + chart2 + chart 3
-'''
+```
 
 #Function Calls#
 ## Create empty chart object with data##
