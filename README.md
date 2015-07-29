@@ -1,5 +1,5 @@
 # Introduction #
-dc.js and crossfilter are quite useful for visualization and exploratory analysis. Although many javascript library already have R packages to use them with Shiny, there is no R package to knowledge to use dc.js in Shiny. Our motivation is to develop an R package that allows us to use dc.js and crossfilter with Shiny, so that we can interactively and quickly build dc.js charts. This project is still in very early stage and just made proof-of-concept to demonstrate the ability to incorporate dc.js and crossfilter in Shiny.
+Dc.js and crossfilter are useful for constructing interactive  visualizations and exploratory analysis. This project integrates their features and capabilities into the Shiny. This package is still in the early stages of development, so use with caution.
 
 # Installation #
 ```
@@ -7,44 +7,31 @@ if (!require(devtools)) install.packages("devtools")
 devtools:::install_github("massmutual/dcr")
 ```
 
-# Draw simple dc.js charts#
+# Usage #
 We will use the mtcars data to make some simple charts
 ```
 library(dcr)
-```
 
-
-###Create chart object###
-```
+#create chart object
 mydcr <- dcr(mtcars)
-```
 
-###Add a pie chart###
-```
+#pie chart
 chart1 <- dcrchart("pieChart", "chart1", "cyl", reduceCount(), width = 250, height = 250)
-```
 
-###Add a line chart###
-```
+#line chart
 chart2 <- dcrchart("lineChart", "chart2", "mpg", reduceMean("wt"), width = 400, height = 250,
                    xAxisLabel = "Gear", yAxisLabel = "Average Weight")
-```
 
-###Add a row chart###
-```
+
+#row chart
 chart3 <- dcrchart("rowChart", "chart3", "carb", reduceCount(), width = 300, height = 250)
-```
 
-###Finally we can see the charts###
-```
-mydcr + chart1 + chart2 + chart3
-```
-
-#Work with Shiny#
-After we tested the charts, we can build into Shiny app. The only extra step is to layout the charts.
+#view the charts
+mydcr + chart1 + chart2 + chart 3
+...
 
 #Function Calls#
-## Function definition to create empty chart object with data##
+## Create empty chart object with data##
 ###dcr(data)###
 
 ##Function function definition to create a chart to add to chart object##
