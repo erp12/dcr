@@ -151,3 +151,9 @@ d
 
 ## legend
 dcr(mtcars) + dcrchart("pieChart", "bb", "gear", reduceCount(), 400, 400, legend = dc_legend(x = 180, y = 180), innerRadius = 100)
+
+##reduce mean with weights
+data <- data.frame(x = factor(c(1, 1, 2, 2)), y = 1:4, weight = c(1, 2, 1, 2))
+dcr(data) + dcrchart("barChart", "aaa", "x", reduceMean("y", "weight"), 200, 200) +
+  dcrchart("barChart", "aa", "x", reduceMean("y"), 200, 200)
+
