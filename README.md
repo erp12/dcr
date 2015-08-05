@@ -27,7 +27,7 @@ chart2 <- dcrchart("lineChart", "chart2", "mpg", reduceMean("wt"), width = 400, 
 chart3 <- dcrchart("rowChart", "chart3", "carb", reduceCount(), width = 300, height = 250)
 
 #view the charts
-mydcr + chart1 + chart2 + chart 3
+mydcr + chart1 + chart2 + chart3
 ```
 
 #Function Calls#
