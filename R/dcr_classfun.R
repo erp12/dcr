@@ -187,8 +187,14 @@ auto_opts <- function(e, object) {
   }
   ## if reduce function is reduce mean, then attach valueAccessor
   rmean <- attr(e@reduce, "reduceMean", exact = TRUE)
-  if (!(is.null(rmean) || "valueAccessor" %in% names(e@opts))) {
-    e@opts[["valueAccessor"]] <- simple_fun("d.value.avg")
+  if (e@type == "geoChoroplethChart") {
+    if (!(is.null(rmean) || "colorAccessor" %in% names(e@opts))) {
+      e@opts[["colorAccessor"]] <- simple_fun("d.value.avg")
+    }
+  } else {
+    if (!(is.null(rmean) || "valueAccessor" %in% names(e@opts))) {
+      e@opts[["valueAccessor"]] <- simple_fun("d.value.avg")
+    }    
   }
   e
 }

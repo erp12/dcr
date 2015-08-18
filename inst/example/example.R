@@ -149,6 +149,21 @@ geochart <- dcrchart("geoChoroplethChart", "mychart", "State", reduceSum("Deals"
 d <- mydcr + geochart + bar
 d
 
+
+###########
+library(dcr)
+example <- data.frame(state = rep(c("MA", "CT", "NY"), each = 100), 
+                      x = c(rnorm(100, 1), rnorm(100, 2), rnorm(100, 3)),
+                      y = sample(c("A", "B", "C"), 300, replace = TRUE),
+                      stringsAsFactors = FALSE)
+mydcr <- dcr(example)
+bar <- dcrchart("barChart", "myb", "y", reduceSum("x"), 300, 200)
+geochart <- dcrchart("geoChoroplethChart", "geo", "state", reduceSum("x"), 990, 500,
+                     overlayGeoJson = geojson("geojson/us-states.json", "state", "function(d) {return d.properties.name;}"),
+                     linearColors = c("#4575b4", "#ffffbf", "#a50026"),
+                     colorDomain = c(0, 400))
+mydcr + bar + geochart
+
 ## legend
 dcr(mtcars) + dcrchart("pieChart", "bb", "gear", reduceCount(), 400, 400, legend = dc_legend(x = 180, y = 180), innerRadius = 100)
 
