@@ -157,11 +157,11 @@ example <- data.frame(state = rep(c("MA", "CT", "NY"), each = 100),
                       y = sample(c("A", "B", "C"), 300, replace = TRUE),
                       stringsAsFactors = FALSE)
 mydcr <- dcr(example)
-bar <- dcrchart("barChart", "myb", "y", reduceSum("x"), 300, 200)
-geochart <- dcrchart("geoChoroplethChart", "geo", "state", reduceSum("x"), 990, 500,
+bar <- dcrchart("barChart", "myb", "y", reduceMean("x"), 300, 200)
+geochart <- dcrchart("geoChoroplethChart", "geo", "state", reduceMean("x"), 990, 500,
                      overlayGeoJson = geojson("geojson/us-states.json", "state", "function(d) {return d.properties.name;}"),
                      linearColors = c("#4575b4", "#ffffbf", "#a50026"),
-                     colorDomain = c(0, 400))
+                     colorDomain = c(0, 1.33))
 mydcr + bar + geochart
 
 ## legend
