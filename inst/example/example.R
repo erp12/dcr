@@ -76,8 +76,9 @@ mydcr + dcrchart("pieChart", "aa", "cyl", reduceSum("gear"), 200, 200,
                  label = label_keyvalue("aa", string1 = "cyl:", string2 = ", value:", string3 = "", valuemap = NULL))
 
 mydcr + dcrchart("pieChart", "aa", "carb", reduceCount(), 200, 200, label = label_keyvalue("aa"))
-mydcr + dcrchart("pieChart", "aa", "carbf", reduceCount(), 200, 200,
-                 label = label_keyvalue("aa", keymap = carbf_levels))
+mydcr + dcrchart("pieChart", "aa", "carbf", reduceSum("gear"), 200, 200,
+                 label = label_keyvalue("aa", keymap = carbf_levels),
+                 title = label_keyvalue("aa", string2 = ":", string3 = "", keymap = carbf_levels, valuemap = NULL))
 
 
 
