@@ -17,6 +17,29 @@ renderChart <- function(expr, divs = FALSE, env = parent.frame(), quoted = FALSE
   }
 }
 
+##' Render dc chart in server.R
+##' @param session shiny session
+##' @param expr expression to evaluate, it should return a dcr chart object
+##' @param divs whether to generate division automatically in ui
+##' @param env environment to evaluate
+##' @param quoted quoted expression or not
+##' @export
+##'
+renderChart_csv <- function(session, expr, divs = FALSE, env = parent.frame(), quoted = FALSE) {
+  func <- shiny::exprToFunction(expr, env, quoted)
+  function() {
+    chart <- func()
+    ## create temporary directory to store temp csv file
+    if (!dir.exists("dcr_temp")) dir.create("dcr_temp")
+    singleton(addResourcePath("dcr_temp", "dcr_temp"))
+    filename <- tempfile(tmpdir = "dcr_temp", fileext = ".csv")
+    ## remove temp csv file when session ended
+    session$onSessionEnded(function() unlink(filename))
+    write.csv(chart@data, file = filename, row.names = FALSE)
+    html(chart, divs, csv = TRUE, filename)
+  }
+}
+
 ##' Chart output for shiny in ui.R
 ##' @param outputId outputId rendered from server.R
 ##' @export
