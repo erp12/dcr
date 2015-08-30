@@ -4,12 +4,16 @@
 \alias{html}
 \title{Convert dcr object to html code}
 \usage{
-html(object, divs = FALSE)
+html(object, divs = FALSE, csv = FALSE, filename = NULL)
 }
 \arguments{
 \item{divs}{whether or not to generate divisions}
 
+\item{csv}{whether or not export data in csv format, otherwise it will export as json format}
+
 \item{obj}{dcr chart object}
+
+\item{csv}{file filename}
 }
 \description{
 Convert dcr object to html code

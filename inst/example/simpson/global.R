@@ -11,7 +11,10 @@ adbygender <- dcrchart("barChart", "adgender", "Gender", reduceMean("Admit", "Fr
 adbydept <- dcrchart("barChart", "addept", "Dept", reduceMean("Admit", "Freq"), 350, 250,
                    yAxis = y_axis(ticks = 6), gap = 5, yAxisLabel = "Admission Rate",
                     y = x_linear(c(0, 0.82)))
-ctbygender <- dcrchart("pieChart", "ctgender", use_dimension("adgender"), reduceSum("Freq"), 350, 250, innerRadius = 40, radius = 100)
-ctbydept <- dcrchart("pieChart", "ctdept", use_dimension("addept"), reduceSum("Freq"), 350, 250, innerRadius = 40, radius = 100)
+ctbygender <- dcrchart("pieChart", "ctgender", use_dimension("adgender"), reduceSum("Freq"),
+                       350, 250, innerRadius = 40, radius = 100, label = label_keyvalue("ctgender"))
+ctbydept <- dcrchart("pieChart", "ctdept", use_dimension("addept"),
+                     reduceSum("Freq"), 350, 250, innerRadius = 40, radius = 100,
+                     label = label_keyvalue("ctdept"))
 
 mydcr + adbygender + adbydept + ctbygender + ctbydept

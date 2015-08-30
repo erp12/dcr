@@ -63,3 +63,22 @@ data <- data.frame(x = factor(c(1, 1, 2, 2)), y = 1:4, weight = c(1, 2, 1, 2))
 dcr(data) + dcrchart("barChart", "aaa", "x", reduceMean("y", "weight"), 200, 200) +
   dcrchart("barChart", "aa", "x", reduceMean("y"), 200, 200)
 
+## test label_keyvalue function
+data(mtcars)
+mtcars$carbf <- factor(mtcars$carb)
+carbf_levels <- levels(mtcars$carbf)
+mtcars$carbf <- as.numeric(mtcars$carbf)
+mydcr <- dcr(mtcars)
+mydcr + dcrchart("pieChart", "aa", "cyl", reduceCount(), 200, 200, label = label_keyvalue("aa"))
+mydcr + dcrchart("pieChart", "aa", "cyl", reduceSum("gear"), 200, 200, label = label_keyvalue("aa"))
+
+mydcr + dcrchart("pieChart", "aa", "cyl", reduceSum("gear"), 200, 200,
+                 label = label_keyvalue("aa", string1 = "cyl:", string2 = ", value:", string3 = "", valuemap = NULL))
+
+mydcr + dcrchart("pieChart", "aa", "carb", reduceCount(), 200, 200, label = label_keyvalue("aa"))
+mydcr + dcrchart("pieChart", "aa", "carbf", reduceCount(), 200, 200,
+                 label = label_keyvalue("aa", keymap = carbf_levels))
+
+
+
+

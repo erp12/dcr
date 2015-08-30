@@ -132,3 +132,54 @@ pluck_key <- function(var) simple_fun(sprintf("d.key.%s", var))
 ##' @export
 ##'
 pluck_value <- function(var) simple_fun(sprintf("d.value.%s", var))
+
+##' Label function to add label to element of the chart
+##'
+##' It typically works with label or title argument in charts like pieChart,
+##' rowChart, bubbleChart. The label is created as string1 + key + string2 +
+##' value + string3. key and value can be mapped in a way specified in keymap
+##' and valuemap. By default, the label is shown as key(value percent), for example
+##' if a slice with key 'name' has 40\% of total value, then it shows as name(40\%).
+##'
+##'@param id chart id
+##'@param string1 first string
+##'@param string2 second string
+##'@param string3 theird string
+##'@param keymap how to map key to label. If key is NULL (default), then original
+##'value is used. If key is NA, then empty string is used. If key is a string vectror,
+##'then we assume key is integer 1:n and vector[key] is used for label. This is useful
+##'when we convert a factor to numeric to reduce data traffic. We can first convert
+##'factor variabel to numeric, 1 to number of levels, and its level can be used as keymap.
+##'@param valuemap how to map value to label. If value is NULL, then original value is used.
+##'If value is NA, then empty string is used. If value is "percent" (default), then percentage
+##' over sum of all values is used.
+##'@export
+##'
+label_keyvalue <- function(id, string1 = "", string2 = "(", string3 = ")", keymap = NULL, valuemap = "percent") {
+  dc_code(sprintf(" function(d) {\n%s\n%s
+  return %s + key + %s + value + %s;
+}", key_code(keymap), value_code(id, valuemap), js(string1), js(string2), js(string3)))
+}
+
+key_code <- function(keymap) {
+  if (is.null(keymap)) return("  var key = d.key;")
+  if (length(keymap) == 1 && is.na(keymap)) return("var key = \"\";")
+  sprintf("  var keydic = %s;
+  key = keydic[d.key-1];
+  ", js(keymap))
+}
+
+value_code <- function(id, valuemap) {
+  if (is.null(valuemap)) return("  var value = d.value;")
+  if (length(valuemap) == 1 && is.na(valuemap)) return ("  var value = \"\";")
+  if (valuemap == "percent") {
+    return(sprintf("  var x = d3.sum(%sGroup.all(), function(d){ return d.value; });;
+  var value;
+  if (chart%s.hasFilter() && !chart%s.hasFilter(d.key)) {
+    value = \"0%%\";
+  } else {
+    value = Math.round(d.value / x * 100) + \"%%\";
+  }", id, id, id))
+  }
+  stop("Invalid valuemap: must be NULL, NA, or percent")
+}
