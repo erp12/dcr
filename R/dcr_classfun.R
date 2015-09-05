@@ -170,6 +170,11 @@ auto_opts <- function(e, object) {
   dimid <- get_dimid(e@id, object)
   value <- object@data[[object@charts[[dimid]]@dimension]]
   vtype <- ifelse(is.numeric(value), "numeric", class(value))
+  ## if one options is function, run the function on e
+  for (name in names(e@opts)) {
+    f <- e@opts[[name]]
+    if (class(f) == "function") e@opts[[name]] <- f(e)
+  }
   ## Automatically attach x axis definition for line chart and bar chart
   if (e@type %in% c("barChart", "lineChart")) {
     if (!("x" %in% names(e@opts))) {

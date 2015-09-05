@@ -133,6 +133,15 @@ pluck_key <- function(var) simple_fun(sprintf("d.key.%s", var))
 ##'
 pluck_value <- function(var) simple_fun(sprintf("d.value.%s", var))
 
+##' Label axis ticks using Killo Mega Billion
+##' @export
+##'
+tick_KMB <- function() dc_code("function (d) {
+  if (d >=1000000000) return d/1000000000 + 'B';
+  if (d >= 1000000) return d/1000000 + 'M';
+  if (d >= 1000) return d/1000 + 'K';
+  return d;}")
+
 ##' Label function to add label to element of the chart
 ##'
 ##' It typically works with label or title argument in charts like pieChart,
@@ -155,10 +164,10 @@ pluck_value <- function(var) simple_fun(sprintf("d.value.%s", var))
 ##' over sum of all values is used.
 ##'@export
 ##'
-label_keyvalue <- function(id, string1 = "", string2 = "(", string3 = ")", keymap = NULL, valuemap = "percent") {
-  dc_code(sprintf(" function(d) {\n%s\n%s
+label_keyvalue <- function(string1 = "", string2 = "(", string3 = ")", keymap = NULL, valuemap = "percent") {
+  function(e) dc_code(sprintf(" function(d) {\n%s\n%s
   return %s + key + %s + value + %s;
-}", key_code(keymap), value_code(id, valuemap), js(string1), js(string2), js(string3)))
+}", key_code(keymap), value_code(e, valuemap), js(string1), js(string2), js(string3)))
 }
 
 key_code <- function(keymap) {
@@ -169,17 +178,17 @@ key_code <- function(keymap) {
   ", js(keymap))
 }
 
-value_code <- function(id, valuemap) {
+value_code <- function(e, valuemap) {
   if (is.null(valuemap)) return("  var value = d.value;")
   if (length(valuemap) == 1 && is.na(valuemap)) return ("  var value = \"\";")
   if (valuemap == "percent") {
-    return(sprintf("  var x = d3.sum(%sGroup.all(), function(d){ return d.value; });;
+    return(sprintf("  var x = ndx.groupAll().%s.value();
   var value;
   if (chart%s.hasFilter() && !chart%s.hasFilter(d.key)) {
     value = \"0%%\";
   } else {
     value = Math.round(d.value / x * 100) + \"%%\";
-  }", id, id, id))
+  }", e@reduce, e@id, e@id, e@id))
   }
   stop("Invalid valuemap: must be NULL, NA, or percent")
 }

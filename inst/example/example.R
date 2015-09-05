@@ -69,17 +69,21 @@ mtcars$carbf <- factor(mtcars$carb)
 carbf_levels <- levels(mtcars$carbf)
 mtcars$carbf <- as.numeric(mtcars$carbf)
 mydcr <- dcr(mtcars)
-mydcr + dcrchart("pieChart", "aa", "cyl", reduceCount(), 200, 200, label = label_keyvalue("aa"))
-mydcr + dcrchart("pieChart", "aa", "cyl", reduceSum("gear"), 200, 200, label = label_keyvalue("aa"))
+mydcr + dcrchart("pieChart", "aa", "cyl", reduceCount(), 200, 200, label = label_keyvalue())
+mydcr + dcrchart("pieChart", "aa", "cyl", reduceSum("gear"), 200, 200, label = label_keyvalue(valuemap = NULL))
 
 mydcr + dcrchart("pieChart", "aa", "cyl", reduceSum("gear"), 200, 200,
-                 label = label_keyvalue("aa", string1 = "cyl:", string2 = ", value:", string3 = "", valuemap = NULL))
+                 label = label_keyvalue(string1 = "cyl:", string2 = ", value:", string3 = "", valuemap = NULL))
 
-mydcr + dcrchart("pieChart", "aa", "carb", reduceCount(), 200, 200, label = label_keyvalue("aa"))
+mydcr + dcrchart("pieChart", "aa", "carb", reduceCount(), 200, 200, label = label_keyvalue())
 mydcr + dcrchart("pieChart", "aa", "carbf", reduceSum("gear"), 200, 200,
                  label = label_keyvalue("aa", keymap = carbf_levels),
                  title = label_keyvalue("aa", string2 = "-", string3 = "", keymap = carbf_levels, valuemap = NULL))
 
-
+## test tick_KMB
+data <- data.frame(group = sample(letters[1:5], 10000, replace = TRUE),
+                   y = rnorm(10000, 1000, 1000))
+dcr(data) + dcrchart("rowChart", "a", "group", reduceSum("y"), 400, 250, xAxis = x_axis(tickFormat = tick_KMB()))
+dcr(data) + dcrchart("barChart", "a", "group", reduceSum("y"), 230, 200, yAxis = y_axis(tickFormat = tick_KMB()))
 
 

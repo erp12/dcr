@@ -4,12 +4,10 @@
 \alias{label_keyvalue}
 \title{Label function to add label to element of the chart}
 \usage{
-label_keyvalue(id, string1 = "", string2 = "(", string3 = ")",
+label_keyvalue(string1 = "", string2 = "(", string3 = ")",
   keymap = NULL, valuemap = "percent")
 }
 \arguments{
-\item{id}{chart id}
-
 \item{string1}{first string}
 
 \item{string2}{second string}
@@ -25,6 +23,8 @@ factor variabel to numeric, 1 to number of levels, and its level can be used as 
 \item{valuemap}{how to map value to label. If value is NULL, then original value is used.
 If value is NA, then empty string is used. If value is "percent" (default), then percentage
 over sum of all values is used.}
+
+\item{id}{chart id}
 }
 \description{
 It typically works with label or title argument in charts like pieChart,
