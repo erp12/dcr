@@ -63,7 +63,7 @@ html <- function(object, divs = FALSE, csv = FALSE, filename = NULL) {
                                     sprintf("var data = %s", jsonlite:::toJSON(object@data))),
                              map_fmt(object@data, csv))
   ## chart definitions
-  mhtml$chart_code <- paste(sapply(object@charts, chart_def), collapse = "\n")
+  mhtml$chart_code <- paste(sapply(object@charts, chart_def, global = csv), collapse = "\n")
   mhtml$dim_code <- paste(sapply(object@charts, dimension_def), collapse = "\n")
   mhtml$red_code <- paste(sapply(object@charts, reduce_def, object = object), collapse = "\n")
   for (id in names(object@charts)) object@charts[[id]] <- stack_opts(object@charts[[id]])
@@ -109,7 +109,10 @@ use_dimension <- function(id) {
 
 ## Functions not to export-------------------------------------------------------------------------------
 ## generate code part for chart definitions
-chart_def <- function(e) sprintf("var chart%s = dc.%s(\"#%s\");", e@id, e@type, e@id)
+chart_def <- function(e, global = FALSE) {
+  g <- ifelse(global, "", "var ")
+  sprintf("%schart%s = dc.%s(\"#%s\");", g, e@id, e@type, e@id)
+}
 
 ## generate code part for dimension definitions
 dimension_def <- function(e) {
