@@ -74,6 +74,66 @@ dc_resetAll <- function(name = "Reset All") {
   shiny::div(shiny::a(name, href = "javascript:dc.filterAll(); dc.renderAll();"))
 }
 
+##' Display current filters
+##'
+##' @param text text put before the displayed filters
+##' @export
+##' @examples
+##' \dontrun{
+##'
+##' # For example, we put following in the ui.R
+##' div(dc_filters(), dc_reset("mychart"), id = "mychart")
+##' }
+##'
+
+dc_filters <- function(text = "Current filter:") {
+  shiny::span(text, span(class = "filter"))
+}
+
+##' Create a division in ui.R showing one dc chart
+##'
+##' This function combines frequently used UI such as current filters,
+##' reset link, and chart names
+##'
+##' @param id the chart id
+##' @param name the text for the chart showing above the chart
+##' @param reset whether or not show the reset link
+##' @param show_filter whether or not show the current filters
+##' @param reset_text the text for reset link
+##' @param filter_text the text preceding displayed filters
+##'
+##' @examples
+##' \dontrun{
+##'
+##' # We can put following in the ui.R
+##' dc_ui("chart1", "The first chart", show_filter = TRUE, filter_text = "Selected:")
+##' }
+##'
+##' @export
+
+dc_ui <- function(id, text = "", reset = TRUE, show_filter = FALSE,
+                  reset_text = "reset", filter_text = "Current Filter:") {
+  name_ui <- strong(text)
+  if (reset) {
+    reset_ui <- shiny::a(reset_text,
+                         class = "reset",
+                         href = sprintf('javascript:chart%s.filterAll();dc.redrawAll();', id),
+                         style = "display: none;")
+  } else {
+    reset_ui <- NULL
+  }
+  if (show_filter) {
+    filter_ui <- shiny::span(class="reset",
+                             style = "display: none;",
+                             filter_text,
+                             shiny::span(class = "filter"))
+  } else {
+    filter_ui <- NULL
+  }
+  clearfix_ui <- shiny::div(class = "clearfix")
+  div(list(name_ui, filter_ui, reset_ui, clearfix_ui), id = id)
+}
+
 ##' Define overlayGeoJson for geoChoropleth chart
 ##' @param jsonfile path for geojson file
 ##' @param name name of the layer
