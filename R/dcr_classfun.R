@@ -34,9 +34,11 @@ dcrchart <- function(type, id, dimension, reduce, width, height, ..., group_name
 ##' @param divs whether or not to generate divisions
 ##' @param csv whether or not export data in csv format, otherwise it will export as json format
 ##' @param csv file filename
+##' @param input_biding whether or not binding filter values to a input so server.R can
+##' access the filters of each chart through input$chart
 ##' @export
 ##'
-html <- function(object, divs = FALSE, csv = FALSE, filename = NULL) {
+html <- function(object, divs = FALSE, csv = FALSE, filename = NULL, input_binding = FALSE) {
   mhtml <- list()
   ## pre-processing
   nochain <- c()
@@ -52,6 +54,11 @@ html <- function(object, divs = FALSE, csv = FALSE, filename = NULL) {
       nochain <- c(nochain, sprintf("chart%s.%s;", id, yaxis))
       object@charts[[id]]@opts[["yAxis"]] <- NULL
     }
+    # Add input binding (2/2/2016)
+    if (input_binding) {
+      object@charts[[id]]@opts[["on"]] <- filter_binding(id)
+    }
+    #
   }
   nochain <- paste0(nochain, collapse = "\n")
   ## head part
@@ -204,6 +211,12 @@ auto_opts <- function(e, object) {
     e@opts[["valueAccessor"]] <- simple_fun("d.value.avg")
   }
   e
+}
+
+# Generate javascript code input bindings for filters
+# It basically creates a listener to listen to filter event using chart option "on"
+filter_binding <- function(id) {
+  dc_code(sprintf('"filtered", function(chart) {Shiny.onInputChange("%s", chart.filters());}', id))
 }
 
 ## generate stack opts

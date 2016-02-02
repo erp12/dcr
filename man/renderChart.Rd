@@ -4,12 +4,17 @@
 \alias{renderChart}
 \title{Render dc chart in server.R}
 \usage{
-renderChart(expr, divs = FALSE, env = parent.frame(), quoted = FALSE)
+renderChart(expr, divs = FALSE, input_binding = FALSE,
+  env = parent.frame(), quoted = FALSE)
 }
 \arguments{
 \item{expr}{expression to evaluate, it should return a dcr chart object}
 
 \item{divs}{whether to generate division automatically in ui}
+
+\item{input_binding}{whether or not to allow server.R to access each chart's filters, if it is
+TRUE, then we can obtain the current filter values of chart by its id, input$chart_id. If the
+chart has no filter, then the value is NULL.}
 
 \item{env}{environment to evaluate}
 

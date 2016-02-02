@@ -4,7 +4,8 @@
 \alias{html}
 \title{Convert dcr object to html code}
 \usage{
-html(object, divs = FALSE, csv = FALSE, filename = NULL)
+html(object, divs = FALSE, csv = FALSE, filename = NULL,
+  input_binding = FALSE)
 }
 \arguments{
 \item{divs}{whether or not to generate divisions}
@@ -14,6 +15,9 @@ html(object, divs = FALSE, csv = FALSE, filename = NULL)
 \item{obj}{dcr chart object}
 
 \item{csv}{file filename}
+
+\item{input_biding}{whether or not binding filter values to a input so server.R can
+access the filters of each chart through input$chart}
 }
 \description{
 Convert dcr object to html code
