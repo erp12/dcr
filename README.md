@@ -7,6 +7,17 @@ if (!require(devtools)) install.packages("devtools")
 devtools:::install_github("massmutual/dcr")
 ```
 
+# Examples #
+- Input binding example (need **dplyr** package installed)
+```
+shiny::runGitHub("massmutual/dcr", subdir = "inst/example/input_binding")
+```
+
+- Stock example. To run this example we need to install R packages **quantmod**, **dplyr** and **lubridate**
+```
+shiny::runGitHub("massmutual/dcr", subdir = "inst/example/stock")
+```
+
 # Usage #
 ```
 #We will use the mtcars data to make some simple charts

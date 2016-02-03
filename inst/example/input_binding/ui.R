@@ -11,6 +11,8 @@ shinyUI(fixedPage(
 
   chartOutput("dcr_out"),
   
+  hr(),
+  h4("The data table will filter the data based on dc charts filters"),
   dataTableOutput("filtered_data")
 
 ))
