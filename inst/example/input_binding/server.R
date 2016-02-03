@@ -1,10 +1,3 @@
-
-# This is the server logic for a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://shiny.rstudio.com
-#
-
 library(shiny)
 library(dplyr)
 
@@ -26,12 +19,11 @@ shinyServer(function(input, output, session) {
   
   output$filtered_data <- renderDataTable({
     data <- mtcars
+    # We use input$chart_id to access filter values
     f_cyl <- input$chart1
     f_mpg <- input$chart2
     f_carb <- input$chart3
-    print(f_mpg)
-    print(f_cyl)
-    print(f_carb)
+    # If there is no filters on the chart, the input returns NULL
     if (!is.null(f_cyl)) data <- filter(data, cyl %in% f_cyl)
     if (!is.null(f_mpg)) data <- filter(data, between(mpg, f_mpg[1], f_mpg[2]))
     if (!is.null(f_carb)) data <- filter(data, carb %in% f_carb)

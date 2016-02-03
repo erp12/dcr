@@ -3,7 +3,6 @@ library(shiny)
 
 shinyUI(fixedPage(
 
-  # Application title
   titlePanel("Example for Input Binding"),
   
   fixedRow(column(4, dc_ui("chart1", "cyl", show_filter = TRUE)),
