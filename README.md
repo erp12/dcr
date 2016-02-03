@@ -15,7 +15,7 @@ shiny::runGitHub("massmutual/dcr", subdir = "inst/example/input_binding")
 
 - Stock example. To run this example we need to install R packages **quantmod**, **dplyr** and **lubridate**
 ```
-shiny::runGitHub("massmutual/dcr", subdir = "inst/example/stock")
+shiny::runGitHub("massmutual/dcr", subdir = "inst/example/stocks")
 ```
 
 # Usage #
