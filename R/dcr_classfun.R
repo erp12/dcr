@@ -23,10 +23,19 @@ dcr <- function(data, charts = list()) {
 ##' @export
 ##'
 dcrchart <- function(type, id, dimension, reduce, width, height, ..., group_name = "") {
+
+  parsed_width <- parse_chart_width(width = width)
+  responsive_width <- ifelse(parsed_width[[2]], parsed_width[[3]], NaN)
+
+  parsed_height <- parse_chart_height(height = height)
+  responsive_height <- ifelse(parsed_height[[2]], parsed_height[[3]], NaN)
+
   opts <- list(...)
-  opts <- c(list(width = width, height = height), opts)
+  opts <- c(list(width = parsed_width[[1]], height = parsed_height[[1]]), opts)
   new("dcrchart", type = type, id = id, dimension = dimension,
-      reduce = reduce, opts = opts, group_name = group_name)
+      reduce = reduce, opts = opts, group_name = group_name,
+      is_width_responsive = parsed_width[[2]], responsive_width = responsive_width,
+      is_height_responsive = parsed_height[[2]], responsive_height = responsive_height)
 }
 
 ##' Convert dcr object to html code
@@ -78,6 +87,9 @@ html <- function(object, divs = FALSE, csv = FALSE, filename = NULL, input_bindi
   ## codes for each chart
   mhtml$codes <- paste(sapply(object@charts, chartcodes, object = object), collapse = "\n")
   mhtml$nochain <- nochain
+  mhtml$responsive_width_charts_js_var <- responsive_width_charts_js_var(object@charts)
+  mhtml$responsive_height_charts_js_var <- responsive_height_charts_js_var(object@charts)
+  mhtml$responive_charts_init <- "dcr_onResize(false);"
   mhtml$tail <- html_tail(csv)
   mhtml <-  paste(unlist(mhtml), collapse = "\n")
   if (divs) {
@@ -85,6 +97,11 @@ html <- function(object, divs = FALSE, csv = FALSE, filename = NULL, input_bindi
     code_div <- paste(code_div, collapse = "\n")
     mhtml <- paste(code_div, mhtml, sep = "\n")
   }
+
+  fileConn<-file("~/mm_projects/dcr/foo.html")
+  writeLines(mhtml[1], fileConn)
+  close(fileConn)
+
   mhtml
 }
 
@@ -285,4 +302,74 @@ map_fmt <- function(data, csv = FALSE) {
 html_tail <- function(csv = FALSE) {
   csv_char <- ifelse(csv, "\n});", "")
   sprintf("dc.renderAll();\ndc.redrawAll();%s\n</script>", csv_char)
+}
+
+
+#########################
+# Responsive chart sizes
+
+##' Determine if chart width is given by num of px or % of window width
+##' @param width The user specified width
+##'
+parse_chart_width <- function(width) {
+  if (is.numeric(width)) {
+    return(list(width, F))
+  } else if (is.character(width)) {
+    if (substr(width, nchar(width), nchar(width)) == "%") {
+      width_pct <- as.numeric(substr(width, 1, nchar(width)-1)) / 100
+      return(list(300, T, width_pct))
+    } else {
+      return(list(as.numeric(width), F))
+    }
+  }
+}
+
+##' Determine if chart height is given by num of px or % of window height
+##' @param height The user specified height
+##'
+parse_chart_height <- function(height) {
+  if (is.numeric(height)) {
+    return(list(height, F))
+  } else if (is.character(height)) {
+    if (substr(height, nchar(height), nchar(height)) == "%") {
+      height_pct <- as.numeric(substr(height, 1, nchar(height)-1)) / 100
+      return(list(300, T, height_pct))
+    } else {
+      return(list(as.numeric(height), F))
+    }
+  }
+}
+
+##' Adds the charts with responsive widths to JS object
+##' so that responsive_chart_manager.js will update them.
+##' @param charts List of all charts.
+##'
+responsive_width_charts_js_var <- function(charts) {
+  responsive_charts <- charts[lapply(charts, function(chrt) chrt@is_width_responsive) == T]
+
+  js_var_string <- "var dcr_responsive_chart_widths = {"
+  chrt_strings <- lapply(responsive_charts,
+                         function(chrt) {
+                           paste0('"', chrt@id, '":', chrt@responsive_width, ',')
+                          })
+  chrt_strings <- paste(chrt_strings, collapse = "\n")
+  js_var_string <- paste(js_var_string, chrt_strings, '};', sep = '\n')
+  js_var_string
+}
+
+##' Adds the charts with responsive heights to JS object
+##' so that responsive_chart_manager.js will update them.
+##' @param charts List of all charts.
+##'
+responsive_height_charts_js_var <- function(charts) {
+  responsive_charts <- charts[lapply(charts, function(chrt) chrt@is_height_responsive) == T]
+
+  js_var_string <- "var dcr_responsive_chart_heights = {"
+  chrt_strings <- lapply(responsive_charts,
+                         function(chrt) {
+                           paste0('"', chrt@id, '":', chrt@responsive_height, ',')
+                         })
+  chrt_strings <- paste(chrt_strings, collapse = "\n")
+  js_var_string <- paste(js_var_string, chrt_strings, '};', sep = '\n')
+  js_var_string
 }

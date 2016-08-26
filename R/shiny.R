@@ -65,8 +65,9 @@ chartOutput <- function(outputId) {
         singleton(tags$head(tags$script(src = "js/d3.js", charset="utf-8", type='text/javascript'))),
         singleton(tags$head(tags$script(src = "js/crossfilter.js", type='text/javascript'))),
         singleton(tags$head(tags$script(src = "js/dc.js", type='text/javascript'))),
+        singleton(tags$head(tags$script(src = "js/responsive_chart_manager.js", charset="utf-8", type='text/javascript'))),
         singleton(tags$head(tags$link(rel = "stylesheet", type='text/css', href = 'css/dc.css')))
-      ),
+        ),
       # Add chart html
       htmlOutput(outputId)
   )

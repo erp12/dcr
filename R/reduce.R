@@ -28,7 +28,7 @@ reduceMean_nw <- function(var) {
                   p.sum += v.%s;
                   p.avg = p.sum / p.count;
                   return p;
-      },
+                  },
                   function (p, v) {
                   --p.count;
                   p.sum -= v.%s;
@@ -56,7 +56,7 @@ reduceMean_w <- function(var, w) {
                   p.sum += v.%s * v.%s;
                   p.avg = p.sum / p.count;
                   return p;
-},
+                  },
                   function (p, v) {
                   p.count -= v.%s;
                   p.sum -= v.%s * v.%s;

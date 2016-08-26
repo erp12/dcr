@@ -252,3 +252,4 @@ value_code <- function(e, valuemap) {
   }
   stop("Invalid valuemap: must be NULL, NA, or percent")
 }
+

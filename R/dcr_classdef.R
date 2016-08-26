@@ -20,7 +20,11 @@ dcrchart <- setClass("dcrchart",
                                   dimension = "character",
                                   reduce = "character",
                                   opts = "list",
-                                  group_name = "character"))
+                                  group_name = "character",
+                                  is_width_responsive = "logical",
+                                  is_height_responsive = "logical",
+                                  responsive_width = "numeric",
+                                  responsive_height = "numeric"))
 
 
 ## define "+" method-----------------------------------------------------------------------------------
