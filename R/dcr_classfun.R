@@ -89,7 +89,7 @@ html <- function(object, divs = FALSE, csv = FALSE, filename = NULL, input_bindi
   mhtml$nochain <- nochain
   mhtml$responsive_width_charts_js_var <- responsive_width_charts_js_var(object@charts)
   mhtml$responsive_height_charts_js_var <- responsive_height_charts_js_var(object@charts)
-  mhtml$responive_charts_init <- "dcr_onResize(false);"
+  mhtml$responive_charts_init <- "dcr_setResponsiveSizes();"
   mhtml$tail <- html_tail(csv)
   mhtml <-  paste(unlist(mhtml), collapse = "\n")
   if (divs) {
@@ -98,9 +98,9 @@ html <- function(object, divs = FALSE, csv = FALSE, filename = NULL, input_bindi
     mhtml <- paste(code_div, mhtml, sep = "\n")
   }
 
-  fileConn<-file("~/mm_projects/dcr/foo.html")
-  writeLines(mhtml[1], fileConn)
-  close(fileConn)
+  #fileConn<-file("~/mm_projects/dcr/foo.html")
+  #writeLines(mhtml[1], fileConn)
+  #close(fileConn)
 
   mhtml
 }
