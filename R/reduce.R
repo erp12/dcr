@@ -77,3 +77,40 @@ reduceMean_w <- function(var, w) {
   attr(code, "reduceMean") <- var
   code
 }
+
+##' Reduce function to calculate the count of variable based
+##' divided by the given total. Result is a percent.
+##' @param var the name of the variable to calculate percent.
+##' @param total The total number used when calculating the percent.
+##' @export
+##'
+reduceCountPercentOfTotal <- function(var, total) {
+  code <- paste0("reduce(function (p, v) {
+                 p.count += 1;
+                 if (", total, "== 0) {
+                 p.pct = 0;
+                 } else {
+                 p.pct = p.count / ", total, ";
+                 }
+                 return p;
+                 },
+
+                 function (p, v) {
+                 p.count -= 1;
+                 if (", total, " == 0) {
+                 p.pct = 0;
+                 } else {
+                 p.pct = p.count / ", total, ";
+                 }
+                 return p;
+                 },
+
+                 function () {
+                 return {
+                 count: 0,
+                 pct: 0
+                 };
+                 })
+                 ")
+  return(dc_code(code))
+  }
